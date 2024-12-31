@@ -47,6 +47,8 @@ const Login = ()=>{
                
                 const res = await axios.post("https://leety-server.vercel.app/auth/signin", inpval); // Adjust API endpoint
                  localStorage.setItem("usersdatatoken",res.data.result.token);
+                 localStorage.setItem("usersprofile",res.data.result.userValid.profile);
+                // console.log(res.data.result.userValid.profile);
                   
                 toast.success("Welcome Back 😃!", {
                   position: "top-center"

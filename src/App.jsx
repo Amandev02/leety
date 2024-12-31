@@ -16,6 +16,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { logindata, setLoginData } = useContext(LoginContext);
   let token = localStorage.getItem("usersdatatoken");
+  let profile = localStorage.getItem("usersprofile");
 
   const handleLogin = () => {
     // Implement your login logic
@@ -36,7 +37,7 @@ function App() {
           <Route path="/" element={<DataDisplay />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={token?<Profile />:<Login />} />
+          <Route path="/profile" element={profile?<Profile username={profile} />:<Login />} />
           <Route path="*" element={<Error />} />
         </Routes>
         </Router>

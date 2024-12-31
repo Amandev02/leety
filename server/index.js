@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const dnsRoutes = require('./routes/dnsRoutes');
 // const dnsoracleRoutes = require('./routes/dnsoracleRoutes');
 var cors = require('cors');
+const solvedRoutes = require('./routes/solvedRoutes');
  app.use(cors());
 // const router = express.Router();
 const port = process.env.PORT || 8000 
@@ -24,6 +25,7 @@ app.use(cookieParser());
 
 //routes
 app.use("/auth", authRoutes);
+app.use('/api', solvedRoute);
 // app.use("/api",dnsRoutes);
 //app.use("/oracle", dnsoracleRoutes);
 

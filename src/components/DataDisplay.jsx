@@ -10,35 +10,14 @@ const DataDisplay = () => {
   const [selectedCompany, setSelectedCompany] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [dynamicData, setDynamicData] = useState(data); // Store the dynamic data
-  const [leetcodeUsername, setLeetcodeUsername] = useState('');
   const [solvedProblems, setSolvedProblems] = useState(new Set()); // Track solved problems
 
   const itemsPerPage = 20;
 
-  // Extract unique companies
   const companies = Array.from(
     new Set(Object.values(dynamicData).flatMap((details) => details.slice(1)))
   ).sort((a, b) => a.localeCompare(b));
 
-  // Fetch LeetCode solved problems by username
-  const fetchLeetcodeData = async () => {
-    if (!leetcodeUsername) return;
-    try {
-      const response = await fetch(
-        `https://leetcode-api-faisalshohag.vercel.app/${leetcodeUsername}`
-      );
-      if (!response.ok) {
-        throw new Error('Failed to fetch LeetCode data');
-      }
-      const data = await response.json();
-      const solved = new Set(data.solved); // Assuming API returns "solved" array
-      setSolvedProblems(solved);
-    } catch (error) {
-      console.error('Error fetching LeetCode data:', error);
-    }
-  };
-
-  // Filter Data
   const filteredData = Object.entries(dynamicData).filter(([url, details]) => {
     const [title, ...associatedCompanies] = details;
     const matchesTitle = title.toLowerCase().includes(search.toLowerCase());
@@ -47,7 +26,6 @@ const DataDisplay = () => {
     return matchesTitle && matchesCompany;
   });
 
-  // Pagination Logic
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const paginatedData = filteredData.slice(
     (currentPage - 1) * itemsPerPage,
@@ -60,46 +38,35 @@ const DataDisplay = () => {
     }
   };
 
-  // Fetch Latest Data
-  const fetchData = async () => {
+  const handleCheckboxChange = async (questionTitle, isChecked) => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API}`
-      );
-      if (!response.ok) {
-        throw new Error('Failed to fetch data');
-      }
-      const fetchedData = await response.json();
-      setDynamicData(fetchedData); // Update the dynamic data state
-      setCurrentPage(1); // Reset to first page
+      const response = await fetch('https://leety-server.vercel.app/api/updateSolved', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ questionTitle, solved: isChecked }),
+      });
+      if (!response.ok) throw new Error('Failed to update status');
+  
+      // Update local state
+      setSolvedProblems((prev) => {
+        const updatedSet = new Set(prev);
+        if (isChecked) updatedSet.add(questionTitle);
+        else updatedSet.delete(questionTitle);
+        return updatedSet;
+      });
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error updating solved status:', error);
     }
   };
+  
 
   return (
     <div className="container">
-      {/* Fetch Data and LeetCode Username Input */}
-
       <h1>
-      <button className="fetch-button" onClick={fetchData}>
+        <button className="fetch-button" onClick={() => console.log('Fetch Data')}>
           Fetch Latest Data
         </button>
       </h1>
-      <div className="fetch-controls">
-       
-        {/* <div className="leetcode-controls">
-          <input
-            type="text"
-            placeholder="Enter LeetCode Username"
-            value={leetcodeUsername}
-            onChange={(e) => setLeetcodeUsername(e.target.value)}
-          />
-          <button onClick={fetchLeetcodeData}>Fetch LeetCode Data</button>
-        </div> */}
-      </div>
-
-      {/* Filters */}
       <div className="controls">
         <input
           type="text"
@@ -107,15 +74,14 @@ const DataDisplay = () => {
           value={search}
           onChange={(e) => {
             setSearch(e.target.value);
-            setCurrentPage(1); // Reset to first page on filter change
+            setCurrentPage(1);
           }}
         />
-
         <select
           value={selectedCompany}
           onChange={(e) => {
             setSelectedCompany(e.target.value);
-            setCurrentPage(1); // Reset to first page on filter change
+            setCurrentPage(1);
           }}
         >
           <option value="">Filter by company</option>
@@ -125,7 +91,6 @@ const DataDisplay = () => {
             </option>
           ))}
         </select>
-
         <button
           onClick={() => {
             setSearch('');
@@ -137,7 +102,6 @@ const DataDisplay = () => {
         </button>
       </div>
 
-      {/* Table */}
       {paginatedData.length > 0 ? (
         <>
           <table className="list">
@@ -146,19 +110,20 @@ const DataDisplay = () => {
                 <th>Title</th>
                 <th>Companies</th>
                 <th>Link</th>
+                <th>Solved</th>
               </tr>
             </thead>
             <tbody>
               {paginatedData.map(([url, details]) => {
-                const isSolved = solvedProblems.has(details[0]); // Check if problem is solved
+                const isSolved = solvedProblems.has(details[0]);
                 return (
-                  <tr 
+                  <tr
                     key={url}
-                    className="list1"
-                    // style={{
-                    //   backgroundColor: isSolved ? 'green' : 'transparent',
-                    //   color: isSolved ? 'white' : 'inherit',
-                    // }}
+                    className={isSolved ? 'solved-row' : 'list1'}
+                    style={{
+                      backgroundColor: isSolved ? `#80d18e` : 'transparent',
+                      color: isSolved ? 'white' : 'inherit',
+                    }}
                   >
                     <td>{details[0]}</td>
                     <td>{details.slice(1).join(', ')}</td>
@@ -167,13 +132,19 @@ const DataDisplay = () => {
                         View Problem
                       </a>
                     </td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={isSolved}
+                        onChange={(e) => handleCheckboxChange(details[0], e.target.checked)}
+                      />
+                    </td>
                   </tr>
                 );
               })}
             </tbody>
           </table>
 
-          {/* Pagination */}
           <ul className="page">
             <li
               className={`page__btn ${currentPage > 1 ? 'active' : ''}`}

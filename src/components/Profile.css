@@ -1,0 +1,83 @@
+.dashboard-container {
+    font-family: Arial, sans-serif;
+    max-width: 100%;
+    
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-title {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+   
+}
+
+h2{
+    color: #333;
+}
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    color: #333;
+    
+}
+
+.user-avatar {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-right: 20px;
+    border: 2px solid #ddd;
+}
+
+.user-details p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.stats-grid {
+    display: grid;
+    
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.stats-card {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stats-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.stats-card p {
+    font-size: 20px;
+    font-weight: bold;
+    color: #222;
+}
+
+.dashboard-message {
+    text-align: center;
+    font-size: 18px;
+    margin: 20px;
+    color: #666;
+}
+
+.dashboard-message.error {
+    color: red;
+}

@@ -215,3 +215,7 @@ table {
     background-color: #0056b3;
   }
   
+  .solved-row {
+    background-color: #80d18e; /* Light green */
+  }
+  
