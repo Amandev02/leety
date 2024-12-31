@@ -89,7 +89,7 @@ module.exports.signin_post = async (req,res) => {
                 const token =  createToken(userValid._id);
                 // console.log(token);
                // Cookie generation
-                res.cookie("usercookie",token,{
+                res.cookie("usercookie",{token,profile},{
                     expires:new Date(Date.now()+9000000),
                     httpOnly:true
                 });

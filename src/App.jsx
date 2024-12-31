@@ -9,6 +9,7 @@ import Navbar from './components/Navbar'
 import Error from './components/Error';
 import Register from './components/register';
 import Login from './components/login';
+import Profile from './components/Profile';
 import { LoginContext } from "./components/ContextProvider/Context";
 function App() {
 

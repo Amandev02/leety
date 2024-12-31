@@ -55,7 +55,7 @@ const Register = (()=>{
             // console.log("User registration successfully done");
             try {
                 console.log(inpval);
-                await axios.post("https://assignment-lucid2.vercel.app/auth/signup", inpval); // Adjust API endpoint
+                await axios.post("https://leety-server.vercel.app/auth/signup", inpval); // Adjust API endpoint
                 toast.success("Registration Successfully done 😃!", {
                   position: "top-center"
               });

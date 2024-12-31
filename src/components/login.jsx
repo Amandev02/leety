@@ -45,13 +45,13 @@ const Login = ()=>{
             // console.log("User registration successfully done");
             try {
                
-                const res = await axios.post("https://assignment-lucid2.vercel.app/auth/signin", inpval); // Adjust API endpoint
+                const res = await axios.post("https://leety-server.vercel.app/auth/signin", inpval); // Adjust API endpoint
                  localStorage.setItem("usersdatatoken",res.data.result.token);
                   
                 toast.success("Welcome Back 😃!", {
                   position: "top-center"
               });
-              history("/dns-list"); 
+              history("/profile"); 
                 setinpval({...inpval,profile:"",password:""});
              
               } catch (error) {
